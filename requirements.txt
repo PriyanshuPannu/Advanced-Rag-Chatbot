@@ -1,0 +1,12 @@
+chromadb
+sentence-transformers
+langchain
+langchain-community
+langchain-text-splitters
+pymupdf
+beautifulsoup4
+requests
+streamlit
+ollama
+fastapi
+uvicorn
