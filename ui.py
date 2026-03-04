@@ -20,7 +20,7 @@ if st.button("Submit"):
 
             st.write("### 📄 Sources")
             for src in data["sources"]:
-                st.write(f"- {src['source']}")
+                st.write(f"- {src}")
         else:
             st.error("API Error")
 
