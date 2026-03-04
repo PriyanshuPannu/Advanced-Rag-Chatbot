@@ -15,9 +15,15 @@ def chat(query: str):
     documents, metadata = retrieve(query)
     answer = generate_answer(query, documents)
 
+    # Extract source names from metadata dicts
+    sources = [item["source"] for item in metadata]
+
+    # Deduplicate properly
+    unique_sources = list(set(sources))
+
     return {
         "response": answer,
-        "sources": metadata
+        "sources": unique_sources
     }
 
 
