@@ -64,7 +64,7 @@ def ingest_all_pdfs(data_folder="data"):
                 metadatas=all_metadata
             )
 
-    print("✅ All PDFs ingested successfully.")
+    print(" All PDFs ingested successfully.")
 
 
 if __name__ == "__main__":
