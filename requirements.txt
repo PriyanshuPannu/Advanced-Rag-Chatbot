@@ -10,3 +10,4 @@ streamlit
 ollama
 fastapi
 uvicorn
+rank-bm25

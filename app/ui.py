@@ -78,6 +78,7 @@ h1 {
     max-width: 80%;
     margin-bottom: 10px;
 }
+
 .stTextInput>div>div>input::placeholder {
     color: #FFFFFF !important;
     opacity: 1;
@@ -90,6 +91,7 @@ h1 {
     margin-bottom: 6px;
     font-size: 14px;
 }
+
 .stDownloadButton>button {
     background-color: #4B5CFF;
     color: white;
@@ -107,7 +109,7 @@ h1 {
 """, unsafe_allow_html=True)
 
 # ---------- HEADER ----------
-st.markdown("<h1>🤖 AI Research Paper Assistant</h1>", unsafe_allow_html=True)
+st.markdown("<h1>🤖 ARPA </h1>", unsafe_allow_html=True)
 
 # ---------- SESSION ----------
 if "conversation_id" not in st.session_state:
@@ -138,18 +140,12 @@ for convo in conversations:
     col1, col2 = st.sidebar.columns([4,1])
 
     with col1:
-        if st.button(
-            title,
-            key=f"select_{convo['id']}"
-        ):
+        if st.button(title, key=f"select_{convo['id']}"):
             st.session_state.conversation_id = convo["id"]
             st.rerun()
 
     with col2:
-        if st.button(
-            "🗑",
-            key=f"delete_{convo['id']}"
-        ):
+        if st.button("🗑", key=f"delete_{convo['id']}"):
             delete_conversation(convo["id"])
 
             if st.session_state.conversation_id == convo["id"]:
@@ -234,7 +230,6 @@ for chat in messages:
 
                 pdf_name = src.get("pdf", "Unknown PDF")
                 page = src.get("page", "Unknown")
-                paragraph = src.get("paragraph", "")
 
                 st.markdown(
                 f"""
@@ -248,14 +243,14 @@ for chat in messages:
 
                 pdf_path = f"data/{pdf_name}"
 
-            try:
-                with open(pdf_path, "rb") as f:
-                    st.download_button(
-                        label=f"Download {pdf_name}",
-                        data=f,
-                        file_name=pdf_name,
-                        mime="application/pdf",
-                        key=f"{pdf_name}_{page}",
-                    )
-            except:
-                pass
+                try:
+                    with open(pdf_path, "rb") as f:
+                        st.download_button(
+                            label=f"Download {pdf_name}",
+                            data=f,
+                            file_name=pdf_name,
+                            mime="application/pdf",
+                            key=f"{pdf_name}_{page}",
+                        )
+                except:
+                    pass
