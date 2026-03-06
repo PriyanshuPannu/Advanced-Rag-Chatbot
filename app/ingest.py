@@ -4,15 +4,11 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyMuPDFLoader
-from typing import List, Dict
 from chromadb.api.types import Metadata
 from typing import List
 
 # Persistent Chroma DB
-import chromadb
-
 client = chromadb.PersistentClient(path="chroma_db")
-
 collection = client.get_or_create_collection(name="research_papers")
 
 embedding_model = SentenceTransformer("BAAI/bge-small-en-v1.5")
@@ -27,28 +23,45 @@ def chunk_text(text):
 
 
 def ingest_all_pdfs(data_folder="data"):
+
     for filename in os.listdir(data_folder):
+
         if filename.endswith(".pdf"):
+
             file_path = os.path.join(data_folder, filename)
             print(f"Ingesting: {filename}")
 
             loader = PyMuPDFLoader(file_path)
             documents = loader.load()
 
-            full_text = "\n".join([doc.page_content for doc in documents])
-            chunks = chunk_text(full_text)
+            all_chunks = []
+            all_metadata: List[Metadata] = []
 
-            embeddings = embedding_model.encode(chunks).tolist()
+            for doc in documents:
 
-            ids = [str(uuid.uuid4()) for _ in chunks]
+                page_text = doc.page_content
+                page_number = doc.metadata.get("page", 0) + 1
 
-            metadata: List[Metadata] = [{"source": str(filename)} for _ in chunks]
+                chunks = chunk_text(page_text)
+
+                for i, chunk in enumerate(chunks):
+
+                    all_chunks.append(chunk)
+
+                    all_metadata.append({
+                        "source": filename,        # pdf file name
+                        "page": page_number,       # page number
+                        "paragraph": i + 1         # paragraph/chunk number
+                    })
+
+            embeddings = embedding_model.encode(all_chunks).tolist()
+            ids = [str(uuid.uuid4()) for _ in all_chunks]
 
             collection.add(
-                documents=chunks,
+                documents=all_chunks,
                 embeddings=embeddings,
                 ids=ids,
-                metadatas=metadata
+                metadatas=all_metadata
             )
 
     print("✅ All PDFs ingested successfully.")
