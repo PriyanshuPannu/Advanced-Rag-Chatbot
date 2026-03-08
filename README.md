@@ -1,6 +1,6 @@
 🤖ARPA — AI Research Paper Assistant
 
-Production-grade Retrieval-Augmented Generation (RAG) chatbot that answers questions about AI research papers stored locally as PDFs.
+Retrieval-Augmented Generation (RAG) chatbot that answers questions about AI research papers stored locally as PDFs.
 
 ARPA retrieves relevant research paper sections using hybrid search, then generates grounded answers using a local LLM via Ollama.
 
